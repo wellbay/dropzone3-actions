@@ -33,7 +33,9 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
 - [Copying Files](#copying-files)
 - [Getting a temporary folder](#getting-a-temporary-folder)
 - [OptionsNIBs](#optionsnibs)
-- [Bundling Ruby libs and executables](#bundling-ruby-libs-and-executables)
+- [Included Ruby gems](#included-ruby-gems)
+- [Bundling Ruby gems along with your action](#bundling-ruby-gems-along-with-your-action)
+- [Bundling your own Ruby libs and helper executables](#bundling-your-own-ruby-libs-and-helper-executables)
 - [Customizing your actions icon](#customizing-your-actions-icon)
 - [Distributing your action](#distributing-your-action)
 - [Action Metadata](#action-metadata)
@@ -442,8 +444,79 @@ When your action is run, the values would then be available from the environment
 	</tr>
 </table>
 
+## Included Ruby gems
 
-## Bundling Ruby libs and executables
+The following Ruby gems are distributed along with the Dropzone application bundle and made available for actions to use:
+
+- [rest-client](https://github.com/rest-client/rest-client/blob/master/README.rdoc) - Simple HTTP and REST client for Ruby
+- [httparty](https://github.com/jnunemaker/httparty/blob/master/README.md) - Makes http fun again!
+- [excon](https://github.com/excon/excon/blob/master/README.md) - Usable, fast, simple Ruby HTTP 1.1
+- [fog](http://fog.io/) - The Ruby cloud services library 
+- [aws-sdk](http://aws.amazon.com/sdk-for-ruby/) - AWS SDK for Ruby 
+- [multi_json](https://github.com/intridea/multi_json/blob/master/README.md) - A generic swappable back-end for JSON handling
+
+You can find examples and documentation for these gems from the links above.
+You must add the following line to your action metadata to use the above gems:
+
+```
+# RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
+```
+
+Require the above gems at the top of action.rb to use them. These bundled gems have been tested and confirmed to work correctly with the default Ruby setup under OS X 10.9 and 10.10. 
+Here is an example action (excluding the required metadata) that retrieves the URL http://example.com using the included rest-client gem and prints it to the Dropzone debug console:
+
+```
+require 'rest-client'
+ 
+def clicked
+  puts RestClient.get 'http://example.com'
+end
+```
+
+## Bundling Ruby gems along with your action
+
+If your action needs gems that are not included with the system Ruby or with Dropzone then you can download and run this [bundle-gems.sh](https://gist.github.com/aptonic/27f869d4c3647cb51725) script to download the gems listed in a Gemfile into your action bundle. You must have the bundler gem installed to use this script, you can install bundler by running:
+
+```
+gem install bundler
+```
+
+Below is an example of using this script to download the google-api-client gem into an action bundle:
+
+First create the Gemfile inside the action bundle with the following:
+
+```
+source 'https://rubygems.org'
+gem 'google-api-client'
+```
+
+Now run [bundle-gems.sh](https://gist.github.com/aptonic/27f869d4c3647cb51725) with the action path to download the gems into the bundle:
+
+```
+$ ./bundle-gems.sh ~/Library/Application\ Support/Dropzone\ 3/Actions/Custom\ Action.dzbundle/
+```
+
+In your action.rb you must add the following line to your action metadata to use bundled gems:
+
+```
+# RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
+```
+
+You must also add the following require statement after the action metadata before requiring the bundled gems:
+
+```
+require 'bundler/setup'
+```
+
+Now require the gems:
+
+```
+require 'google/api_client'
+require 'google/api_client/client_secrets'
+require 'google/api_client/auth/installed_app'
+```
+
+## Bundling your own Ruby libs and helper executables
 
 You can include Ruby libs needed by your action by placing them inside your action bundle. Before running your action, runner.rb changes the working directory to the inside of your action bundle. This means you can do require 'libname' where libname is the name of a .rb file inside your action bundle. There is an example of this in the [Flickr Upload](https://github.com/aptonic/dropzone3-actions/tree/master/Flickr%20Upload.dzbundle) bundle. The Flickr Upload action also demonstrates how to launch an application or command line tool bundled with your action. 
 
@@ -477,7 +550,7 @@ The metadata block must begin with the line:
 ```
 And this must be the first thing at the top of the file.
 
-All recognised metadata options are described below:
+All recognized metadata options are described below:
 
 <table>
 	<th width="240">
