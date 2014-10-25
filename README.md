@@ -326,9 +326,9 @@ Note that calling $dz.error results in your script terminating immediately while
 
 ## Getting Input
 
-### $dz.inputbox(title, prompt_text, type)
+### $dz.inputbox(title, prompt_text, field_name)
 
-Shows an input box with the given title and prompt text. If no input is entered or the Cancel button is clicked the script exits and calls [$dz.fail](#dzfailmessage) with an appropriate message. The type parameter is optional and is used if the user doesn't enter any input to show a 'Invalid #{type}' [$dz.fail](#dzfailmessage) message. The type parameter defaults to 'Filename'
+Shows an input box with the given title and prompt text. If no input is entered or the Cancel button is clicked the script exits and calls [$dz.fail](#dzfailmessage) with an appropriate message. The field_name parameter is optional and is used if the user doesn't enter any input to show a '#{field_name} cannot be empty.' [$dz.fail](#dzfailmessage) message. The field_name parameter defaults to 'Filename'
 
 **Example**
 
