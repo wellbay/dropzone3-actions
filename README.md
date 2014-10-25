@@ -646,7 +646,7 @@ All recognized metadata options are described below:
 	</tr>
 	<tr>
 		<td>RunsSandboxed</td>
-		<td>If your action does things that are incompatible with OS X sandboxing (such as running AppleScript or writing to arbitrary directories) then set this to No. Users of the non-Mac App Store version of Dropzone 3 will be able to run your action as normal but users of the Mac App Store version of Dropzone 3 will be prompted to install a special helper app that runs your action unsandboxed on behalf of the parent app.</td>
+		<td>If your action does things that are incompatible with OS X sandboxing (such as running AppleScript or writing to arbitrary directories) then set this to No. Users of the non-Mac App Store version of Dropzone 3 will be able to run your action as normal but users of the Mac App Store version of Dropzone 3 will be prompted to transition to the non-Mac App Store version of the app.</td>
 		<td>Yes</td>
 	</tr>
 	<tr>
