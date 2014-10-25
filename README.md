@@ -29,6 +29,8 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
   - [$dz.error(title, message)](#dzerrortitle-message)
 - [Getting Input](#getting-input)
   - [$dz.inputbox(title, prompt_text, type)](#dzinputboxtitle-prompt_text-type)
+- [Reading from the clipboard](#reading-from-the-clipboard)
+  - [$dz.read_clipboard](#dzread_clipboard)
 - [CocoaDialog](#cocoadialog)
 - [Saving and loading values](#saving-and-loading-values)
 - [Key Modifiers](#key-modifiers)
@@ -335,6 +337,18 @@ filename = $dz.inputbox("Filename Required", "Enter filename:")
 ```
 
 ![Inputbox](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/inputbox.png)
+
+## Reading from the clipboard
+
+### $dz.read_clipboard
+
+Returns the current clipboard contents.
+
+**Example**
+
+```ruby
+clipboard_contents = $dz.read_clipboard
+```
 
 ## CocoaDialog
 
