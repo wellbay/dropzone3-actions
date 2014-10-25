@@ -717,7 +717,12 @@ All recognized metadata options are described below:
 	</tr>
 	<tr>
 		<td>SkipValidation</td>
-		<td>Allows you to disable validation of fields for an OptionsNIB. For example if you specified the Login OptionsNIB then when the user goes to add the action they would be required to enter both a Username and Password. If you wanted to disable validation and make these fields optional then you would set this metadata field to Yes. It defaults to No (validation required).</td>
+		<td>Allows you to disable validation of fields for an OptionsNIB. For example if you specified the Login OptionsNIB then when the user goes to add the action they would be required to enter both a username and password. If you wanted to disable validation and make these fields optional then you would set this metadata field to Yes. It defaults to No (validation required).</td>
+		<td>No</td>
+	</tr>
+	<tr>
+		<td>AuthScope</td>
+		<td>This field is only applicable if your action uses the GoogleAuth OptionsNIB which allows authorization using OAuth 2 in order to use a particular Google service. For an example that uses this option, see the <a href="https://github.com/aptonic/dropzone3-actions/blob/master/Google%20Drive.dzbundle/action.rb">Google Drive</a> action code. A list of possible scopes can be found <a href="http://hayageek.com/google-oauth-scope-list/">here</a></td>
 		<td>No</td>
 	</tr>
 </table>
