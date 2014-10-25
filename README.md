@@ -459,7 +459,7 @@ The following Ruby gems are distributed along with the Dropzone application bund
 You can find examples and documentation for these gems from the links above.
 You must add the following line to your action metadata to use the above gems:
 
-```
+```ruby
 # RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
 ```
 
@@ -493,7 +493,7 @@ gem 'google-api-client'
 
 Now run [bundle-gems.sh](https://gist.github.com/aptonic/27f869d4c3647cb51725) with the action path to download the gems into the bundle:
 
-```ruby
+```
 $ ./bundle-gems.sh ~/Library/Application\ Support/Dropzone\ 3/Actions/Custom\ Action.dzbundle/
 ```
 
@@ -549,7 +549,7 @@ When Dropzone runs an action, the version of Ruby it uses depends on the version
 You can override the above behavior by specifying the RubyPath metadata field in your action metadata. 
 The most common reason to do this is to force the use of Ruby 2.0 under both OS X 10.9 and OS X 10.10. You can do this with the following action metadata line:
 
-```
+```ruby
 # RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
 ```
 
