@@ -715,4 +715,9 @@ All recognized metadata options are described below:
 		<td>The default Ruby used by Dropzone actions is Ruby 1.8 under OS X 10.9 and Ruby 2.0 under OS X 10.10. You can use this metadata field to override these defaults and specify a custom Ruby path. More info about this option can be found in the <a href="#rubypath-metadata-field">RubyPath section</a> above. You generally want to set this to /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby to allow use of gems included with Dropzone.</td>
 		<td>No</td>
 	</tr>
+	<tr>
+		<td>SkipValidation</td>
+		<td>Allows you to disable validation of fields for an OptionsNIB. For example if you specified the Login OptionsNIB then when the user goes to add the action they would be required to enter both a Username and Password. If you wanted to disable validation and make these fields optional then you would set this metadata field to Yes. It defaults to No (validation required).</td>
+		<td>No</td>
+	</tr>
 </table>
