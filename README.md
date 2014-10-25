@@ -667,7 +667,7 @@ All recognized metadata options are described below:
 		<td>OptionsNIB</td>
 		<td>A optional configuration panel that can be shown when adding the action to collect needed info such as a username, password or API key<br/>
 			Currently available OptionsNIBs are: Login, ExtendedLogin, APIKey, UsernameAPIKey, ChooseFolder, ChooseApplication and GoogleAuth.<br/>
-			See the OptionsNIBs section further down for an explanation of how to use these.</td>
+			See the <a href="#optionsnibs">OptionsNIBs section</a> for an explanation of how to use these.</td>
 		<td>No</td>
 	</tr>
 	<tr>
