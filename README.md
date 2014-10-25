@@ -523,11 +523,10 @@ You can include Ruby libs needed by your action by placing them inside your acti
 
 ## RubyPath metadata field
 
-When Dropzone runs an action, the version of Ruby it uses depends on the version of OS X Dropzone is being run under.<br>
-The table below shows which Ruby version is run for each OS X version:
+When Dropzone runs an action, the version of Ruby it uses depends on the version of OS X Dropzone is being run under. The table below shows which Ruby version is run for each OS X version:
 
 <table>
-	<th width="100">
+	<th>
 		OS X Version
 	</th>
 	<th>
@@ -535,15 +534,15 @@ The table below shows which Ruby version is run for each OS X version:
 	</th>
 	<tr>
 		<td>10.8</td>
-		<td width="580">/usr/bin/ruby - This will be Ruby 1.8. No other Ruby versions are included with the system.</td>
+		<td>/usr/bin/ruby - This will be Ruby 1.8. No other Ruby versions are included with the system.</td>
 	</tr>
 	<tr>
 		<td>10.9</td>
-		<td width="580">/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby - Both Ruby 1.8 and Ruby 2.0 are available, with Ruby 1.8 being the current default.</td>
+		<td>/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby - Both Ruby 1.8 and Ruby 2.0 are available, with Ruby 1.8 being the current default.</td>
 	</tr>
 	<tr>
 		<td>10.10</td>
-		<td width="580">/usr/bin/ruby - This will be Ruby 2.0. No other Ruby versions are included with the system.</td>
+		<td>/usr/bin/ruby - This will be Ruby 2.0. No other Ruby versions are included with the system.</td>
 	</tr>
 </table>
 
