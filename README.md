@@ -466,7 +466,7 @@ You must add the following line to your action metadata to use the above gems:
 Require the above gems at the top of action.rb to use them. These bundled gems have been tested and confirmed to work correctly with the default Ruby setup under OS X 10.9 and 10.10. 
 Here is an example action (excluding the required metadata) that retrieves the URL http://example.com using the included rest-client gem and prints it to the Dropzone debug console:
 
-```
+```ruby
 require 'rest-client'
  
 def clicked
@@ -478,7 +478,7 @@ end
 
 If your action needs gems that are not included with the system Ruby or with Dropzone then you can download and run this [bundle-gems.sh](https://gist.github.com/aptonic/27f869d4c3647cb51725) script to download the gems listed in a Gemfile into your action bundle. You must have the bundler gem installed to use this script, you can install bundler by running:
 
-```
+```ruby
 gem install bundler
 ```
 
@@ -486,32 +486,32 @@ Below is an example of using this script to download the google-api-client gem i
 
 First create the Gemfile inside the action bundle with the following:
 
-```
+```ruby
 source 'https://rubygems.org'
 gem 'google-api-client'
 ```
 
 Now run [bundle-gems.sh](https://gist.github.com/aptonic/27f869d4c3647cb51725) with the action path to download the gems into the bundle:
 
-```
+```ruby
 $ ./bundle-gems.sh ~/Library/Application\ Support/Dropzone\ 3/Actions/Custom\ Action.dzbundle/
 ```
 
 In your action.rb you must add the following line to your action metadata to use bundled gems:
 
-```
+```ruby
 # RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
 ```
 
 You must also add the following require statement after the action metadata before requiring the bundled gems:
 
-```
+```ruby
 require 'bundler/setup'
 ```
 
 Now require the gems:
 
-```
+```ruby
 require 'google/api_client'
 require 'google/api_client/client_secrets'
 require 'google/api_client/auth/installed_app'
@@ -554,6 +554,8 @@ The most common reason to do this is to force the use of Ruby 2.0 under both OS 
 ```
 
 Going forward, using Ruby 2.0 is preferred and Ruby 1.8 will be phased out. You must add the above line to use the [gems included](#included-ruby-gems) with Dropzone or if you need to [bundle your own gems](#bundling-ruby-gems-along-with-your-action) along with an action.
+
+As Ruby 2.0 is not available under OS X 10.8, forcing Ruby 2.0 will mean that your action will not work under OS X 10.8. Instead a warning will be shown to the user when they try to add the action asking them to upgrade to a newer version of OS X. With the majority of Dropzone users running either OS X 10.9 or OS X 10.10, Ruby 2.0 is still the recommended option.
 
 If you have other Ruby versions on your system that you installed, you can use these with the RubyPath option but specifying your own Ruby version will mean that the action will only work on your own system and you will not be able to share it with others.
 
@@ -679,7 +681,7 @@ All recognized metadata options are described below:
 	</tr>
 	<tr>
 		<td>RubyPath</td>
-		<td>The default ruby used by Dropzone actions is ruby 1.8 under OS X 10.9 and ruby 2.0 under OS X 10.10. You can use this metadata field to override these defaults and specify a custom ruby path. More info about this option can be found in the <a href="#rubypath-metadata-field">RubyPath section</a> above. You generally want to set this to /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby to allow use of gems included with Dropzone.</td>
+		<td>The default Ruby used by Dropzone actions is Ruby 1.8 under OS X 10.9 and Ruby 2.0 under OS X 10.10. You can use this metadata field to override these defaults and specify a custom Ruby path. More info about this option can be found in the <a href="#rubypath-metadata-field">RubyPath section</a> above. You generally want to set this to /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby to allow use of gems included with Dropzone.</td>
 		<td>No</td>
 	</tr>
 </table>
