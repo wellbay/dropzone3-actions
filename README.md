@@ -36,6 +36,7 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
 - [Included Ruby gems](#included-ruby-gems)
 - [Bundling Ruby gems along with your action](#bundling-ruby-gems-along-with-your-action)
 - [Bundling your own Ruby libs and helper executables](#bundling-your-own-ruby-libs-and-helper-executables)
+- [RubyPath metadata field](#rubypath-metadata-field)
 - [Customizing your actions icon](#customizing-your-actions-icon)
 - [Distributing your action](#distributing-your-action)
 - [Action Metadata](#action-metadata)
@@ -520,6 +521,43 @@ require 'google/api_client/auth/installed_app'
 
 You can include Ruby libs needed by your action by placing them inside your action bundle. Before running your action, runner.rb changes the working directory to the inside of your action bundle. This means you can do require 'libname' where libname is the name of a .rb file inside your action bundle. There is an example of this in the [Flickr Upload](https://github.com/aptonic/dropzone3-actions/tree/master/Flickr%20Upload.dzbundle) bundle. The Flickr Upload action also demonstrates how to launch an application or command line tool bundled with your action. 
 
+## RubyPath metadata field
+
+When Dropzone runs an action, the version of Ruby it uses depends on the version of OS X Dropzone is being run under.<br>
+The table below shows which Ruby version is run for each OS X version:
+
+<table>
+	<th width="100">
+		OS X Version
+	</th>
+	<th>
+		Ruby Version Dropzone Uses
+	</th>
+	<tr>
+		<td>10.8</td>
+		<td width="580">/usr/bin/ruby - This will be Ruby 1.8. No other Ruby versions are included with the system.</td>
+	</tr>
+	<tr>
+		<td>10.9</td>
+		<td width="580">/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby - Both Ruby 1.8 and Ruby 2.0 are available, with Ruby 1.8 being the current default.</td>
+	</tr>
+	<tr>
+		<td>10.10</td>
+		<td width="580">/usr/bin/ruby - This will be Ruby 2.0. No other Ruby versions are included with the system.</td>
+	</tr>
+</table>
+
+You can override the above behavior by specifying the RubyPath metadata field in your action metadata. 
+The most common reason to do this is to force the use of Ruby 2.0 under both OS X 10.9 and OS X 10.10. You can do this with the following action metadata line:
+
+```
+# RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
+```
+
+Going forward, using Ruby 2.0 is preferred and Ruby 1.8 will be phased out. You must add the above line to use the [gems included](#included-ruby-gems) with Dropzone or if you need to [bundle your own gems](#bundling-ruby-gems-along-with-your-action) along with an action.
+
+If you have other Ruby versions on your system that you installed, you can use these with the RubyPath option but specifying your own Ruby version will mean that the action will only work on your own system and you will not be able to share it with others.
+
 ## Customizing your actions icon
 
 There needs to be an icon.png file inside your action bundle. This icon is used as the default action icon when your action is added to the grid. This icon should ideally be at least 300x300px in size. The maximum size action icons can be displayed in the grid is 150x150 but when in retina display modes this is doubled to 300x300. You can change the icon for your action by going into the Dropzone preferences, opening the User Actions tab and clicking the Reveal button to show your Action bundle in the Finder. You then right click the bundle and click 'Show Package Contents' and drag a new icon.png into the bundle. This is illustrated below:
@@ -627,7 +665,7 @@ All recognized metadata options are described below:
 	</tr>
 	<tr>
 		<td>KeyModifiers</td>
-		<td>A comma separated list of key modifiers your action supports. When the user drags a file onto your action they can hold a particular modifier key including Command, Option, Control or Shift. The held modifier will be passed to your script in the ENV['KEY_MODIFIERS'] variable and you can modify the behaviour of your action based on the held key. A example of valid values for this field would be "Option" or "Command, Option, Control, Shift" (without quotes).</td>
+		<td>A comma separated list of key modifiers your action supports. When the user drags a file onto your action they can hold a particular modifier key including Command, Option, Control or Shift. The held modifier will be passed to your script in the ENV['KEY_MODIFIERS'] variable and you can modify the behavior of your action based on the held key. A example of valid values for this field would be "Option" or "Command, Option, Control, Shift" (without quotes).</td>
 		<td>No</td>
 	</tr>
 	<tr>
@@ -638,6 +676,11 @@ All recognized metadata options are described below:
 	<tr>
 		<td>UseSelectedItemNameAndIcon</td>
 		<td>If your action uses the ChooseFolder OptionsNIB then this specifies whether you want the label and icon to be set to the chosen folders after selecting the folder. Defaults to No.</td>
+		<td>No</td>
+	</tr>
+	<tr>
+		<td>RubyPath</td>
+		<td>The default ruby used by Dropzone actions is ruby 1.8 under OS X 10.9 and ruby 2.0 under OS X 10.10. You can use this metadata field to override these defaults and specify a custom ruby path. More info about this option can be found in the <a href="#rubypath-metadata-field">RubyPath section</a> above. You generally want to set this to /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby to allow use of gems included with Dropzone.</td>
 		<td>No</td>
 	</tr>
 </table>
