@@ -27,6 +27,8 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
 - [Showing Alerts and Errors](#showing-alerts-and-errors)
   - [$dz.alert(title, message)](#dzalerttitle-message)
   - [$dz.error(title, message)](#dzerrortitle-message)
+- [Getting Input](#getting-input)
+  - [$dz.inputbox(title, prompt_text, type)](#dzinputboxtitle-prompt_text-type)
 - [CocoaDialog](#cocoadialog)
 - [Saving and loading values](#saving-and-loading-values)
 - [Key Modifiers](#key-modifiers)
@@ -318,6 +320,21 @@ $dz.error("Error Title", "An error occurred...")
 ![Error](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/error.png)
 
 Note that calling $dz.error results in your script terminating immediately while calling $dz.alert allows you to display a message and then continue execution of your script.
+
+
+## Getting Input
+
+### $dz.inputbox(title, prompt_text, type)
+
+Shows an input box with the given title and prompt text. If no input is entered or the Cancel button is clicked the script exits and calls [$dz.fail](#dzfailmessage) with an appropriate message. The type parameter is optional and is used if the user doesn't enter any input to show a 'Invalid #{type}' [$dz.fail](#dzfailmessage) message. The type parameter defaults to 'Filename'
+
+**Example**
+
+```ruby
+filename = $dz.inputbox("Filename Required", "Enter filename:")
+```
+
+![Inputbox](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/inputbox.png)
 
 ## CocoaDialog
 
