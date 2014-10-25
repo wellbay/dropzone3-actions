@@ -446,7 +446,7 @@ Would output /Users/john/Library/Application Support/Dropzone 3/Temp to the debu
 
 Some actions may require additional information from the user, such as login details, API keys or a folder path in order to work. Dropzone provides a way to collect this information by loading an additional interface into the 'Add Action' panel when a user adds your action to the Dropzone grid. When Dropzone runs your action, environment variables are set with the information collected in the OptionsNIB.
 
-The currently available OptionsNIBs are Login, ExtendedLogin, APIKey, UsernameAPIKey, ChooseFolder and ChooseApplication. To use an OptionsNIB, you need to add a line to the metadata section like below:
+The currently available OptionsNIBs are Login, ExtendedLogin, APIKey, UsernameAPIKey, ChooseFolder, ChooseApplication and GoogleAuth. To use an OptionsNIB, you need to add a line to the metadata section like below:
 
 ```ruby
 # OptionsNIB: Login
@@ -666,7 +666,7 @@ All recognized metadata options are described below:
 	<tr>
 		<td>OptionsNIB</td>
 		<td>A optional configuration panel that can be shown when adding the action to collect needed info such as a username, password or API key<br/>
-			Currently available OptionsNIBs are: Login, ExtendedLogin, APIKey, UsernameAPIKey, ChooseFolder and ChooseApplication<br/>
+			Currently available OptionsNIBs are: Login, ExtendedLogin, APIKey, UsernameAPIKey, ChooseFolder, ChooseApplication and GoogleAuth.<br/>
 			See the OptionsNIBs section further down for an explanation of how to use these.</td>
 		<td>No</td>
 	</tr>
@@ -722,7 +722,7 @@ All recognized metadata options are described below:
 	</tr>
 	<tr>
 		<td>AuthScope</td>
-		<td>This field is only applicable if your action uses the GoogleAuth OptionsNIB which allows authorization using OAuth 2 in order to use a particular Google service. For an example that uses this option, see the <a href="https://github.com/aptonic/dropzone3-actions/blob/master/Google%20Drive.dzbundle/action.rb">Google Drive</a> action code. A list of possible scopes can be found <a href="http://hayageek.com/google-oauth-scope-list/">here</a></td>
+		<td>This field is only applicable if your action uses the GoogleAuth OptionsNIB which allows authorization using OAuth 2 in order to use a particular Google service. For an example that uses this option, see the <a href="https://github.com/aptonic/dropzone3-actions/blob/master/Google%20Drive.dzbundle/action.rb">Google Drive</a> action code. A list of possible scopes can be found <a href="http://hayageek.com/google-oauth-scope-list/">here.</a></td>
 		<td>No</td>
 	</tr>
 </table>
