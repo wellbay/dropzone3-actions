@@ -94,17 +94,17 @@ def dragged
 
   $dz.begin("Starting some task...")
   $dz.determinate(true)
-  
+
   # Below lines tell Dropzone to update the progress bar display
   $dz.percent(10)
   sleep(1)
   $dz.percent(50)
   sleep(1)
   $dz.percent(100)
-  
+
   # The below line tells Dropzone to end with a notification center notification with the text "Task Complete"
   $dz.finish("Task Complete")
-  
+
   # You should always call $dz.url or $dz.text last in your script. The below $dz.text line places text on the clipboard.
   # If you don't want to place anything on the clipboard you should still call $dz.url(false)
   $dz.text("Here's some output which will be placed on the clipboard")
@@ -601,14 +601,14 @@ Here's an example that uses the CurlUploader library to upload an image to Imgur
 require 'curl_uploader'
 
 def dragged
-	uploader = CurlUploader.new
-	uploader.upload_url = "https://api.imgur.com/3/upload"
-	uploader.file_field_name = "image"
-	uploader.headers["Authorization"] = "Client-ID #{ENV['client_id']}"
-	results = uploader.upload($items)
+  uploader = CurlUploader.new
+  uploader.upload_url = "https://api.imgur.com/3/upload"
+  uploader.file_field_name = "image"
+  uploader.headers["Authorization"] = "Client-ID #{ENV['client_id']}"
+  results = uploader.upload($items)
 
-	$dz.finish("URL is now on clipboard")
-	$dz.url(results[0][:output]["data"]["link"])
+  $dz.finish("URL is now on clipboard")
+  $dz.url(results[0][:output]["data"]["link"])
 end
 ```
 
@@ -616,7 +616,6 @@ When dragging a file onto an action with the above, the CurlUploader library run
 
 ```
 /usr/bin/curl -# -H "Authorization: Client-ID AUTH_ID"  -F "image=@/Users/john/Desktop/test.png" "https://api.imgur.com/3/upload" 2>&1 | tr -u "\r" "\n"
-
 ```
 
 The output from this command is processed line by line by the CurlUploader library and [$dz.percent](#dzpercentvalue) calls are made automatically so that Dropzone displays the upload progress.
