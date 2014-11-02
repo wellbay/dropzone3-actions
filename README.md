@@ -28,7 +28,7 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
   - [$dz.alert(title, message)](#dzalerttitle-message)
   - [$dz.error(title, message)](#dzerrortitle-message)
 - [Getting Input](#getting-input)
-  - [$dz.inputbox(title, prompt_text, type)](#dzinputboxtitle-prompt_text-type)
+  - [$dz.inputbox(title, prompt_text, field_name)](#dzinputboxtitle-prompt_text-field_name)
 - [Reading from the clipboard](#reading-from-the-clipboard)
   - [$dz.read_clipboard](#dzread_clipboard)
 - [CocoaDialog](#cocoadialog)
@@ -41,6 +41,7 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
 - [Bundling Ruby gems along with your action](#bundling-ruby-gems-along-with-your-action)
 - [Bundling your own Ruby libs and helper executables](#bundling-your-own-ruby-libs-and-helper-executables)
 - [RubyPath metadata field](#rubypath-metadata-field)
+- [CurlUploader Ruby library](#curluploader-ruby-library)
 - [Customizing your actions icon](#customizing-your-actions-icon)
 - [Distributing your action](#distributing-your-action)
 - [Action Metadata](#action-metadata)
@@ -589,6 +590,64 @@ Going forward, using Ruby 2.0 is preferred and Ruby 1.8 will be phased out. You 
 As Ruby 2.0 is not available under OS X 10.8, forcing Ruby 2.0 will mean that your action will not work under OS X 10.8. Instead a warning will be shown to the user when they try to add the action asking them to upgrade to a newer version of OS X. With the majority of Dropzone users running either OS X 10.9 or OS X 10.10, Ruby 2.0 is still the recommended option.
 
 If you have other Ruby versions on your system that you installed, you can use these with the RubyPath option but specifying your own Ruby version will mean that the action will only work on your own system and you will not be able to share it with others.
+
+## CurlUploader Ruby library
+
+Some web services (such as Imgur and ImageShack) allow you to upload a file by posting it to a particular URL. To achieve this, Dropzone provides a Ruby wrapper around the curl command line tool included with OS X. The reason for using command line curl is that it provides upload progress as the file is sent. Upload progress is not offered by the built in Ruby libraries such as 'net/http' and so a solution was needed that worked out of the box on all versions of OS X and didn't rely on libraries (such as libcurl) that required compilation of native extensions.
+
+Here's an example that uses the CurlUploader library to upload an image to Imgur. Action metadata is not shown (the below would also need # OptionsNIB: Imgur specified in the metadata as this causes the client_id environment variable required by Imgur for anonymous uploading to be set). You can change the upload_url and other options as needed to work with your own web service. 
+
+```ruby
+require 'curl_uploader'
+
+def dragged
+	uploader = CurlUploader.new
+	uploader.upload_url = "https://api.imgur.com/3/upload"
+	uploader.file_field_name = "image"
+	uploader.headers["Authorization"] = "Client-ID #{ENV['client_id']}"
+	results = uploader.upload($items)
+
+	$dz.finish("URL is now on clipboard")
+	$dz.url(results[0][:output]["data"]["link"])
+end
+```
+
+When dragging a file onto an action with the above, the CurlUploader library runs the following command using IO.popen:
+
+```
+/usr/bin/curl -# -H "Authorization: Client-ID AUTH_ID"  -F "image=@/Users/john/Desktop/test.png" "https://api.imgur.com/3/upload" 2>&1 | tr -u "\r" "\n"
+
+```
+
+The output from this command is processed line by line by the CurlUploader library and [$dz.percent](#dzpercentvalue) calls are made automatically so that Dropzone displays the upload progress.
+
+The result after uploading with curl is an array of hashes with the keys <em>:output</em> and <em>:curl_output_valid</em> for every path uploaded. <em>:output</em> is a hash created by treating the curl output as JSON. <em>:curl_output_valid</em> is set to true if a certain string is found in the output. The starting string also gives CurlUploader a string from which to start processing output from. This starting string defaults to '"success'" but it can be set as follows:
+
+```ruby
+uploader.output_start_token = '"success"'
+```
+
+Here's an example of the results array after uploading two images successfully to Imgur (with some keys removed for brevity).
+
+```ruby
+results = uploader.upload($items)
+puts results.inspect
+```
+
+```ruby
+[{:output => {"data" => {"link" => "http://i.imgur.com/rTfVPbqx.png"}, :curl_output_valid => true}, 
+{:output => {"data" => {"link" => "http://i.imgur.com/TghcXsze.png"}, :curl_output_valid => true}]
+```
+
+If required you can specify extra POST variables (for example if the web service required you to post extra variables for authentication, such as an API key) by setting post_vars with a hash of the variables you wish to set. An example of this is given below.
+
+```ruby
+uploader.post_vars = {:api_key => ENV['api_key']}
+```
+
+The same applies for setting headers, simply set uploader.headers to a hash with the required headers as shown in the first example.
+
+You can view the source code for the CurlUploader library inside the Dropzone 3 application bundle at 'Dropzone 3.app/Contents/Actions/lib/curl_uploader.rb'
 
 ## Customizing your actions icon
 
