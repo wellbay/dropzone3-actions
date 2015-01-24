@@ -487,6 +487,7 @@ The following Ruby gems are distributed along with the Dropzone application bund
 - [fog](http://fog.io/) - The Ruby cloud services library 
 - [aws-sdk](http://aws.amazon.com/sdk-for-ruby/) - AWS SDK for Ruby 
 - [multi_json](https://github.com/intridea/multi_json/blob/master/README.md) - A generic swappable back-end for JSON handling
+- [google-api-client](https://github.com/google/google-api-ruby-client) - Access many different Google APIs. Currently used by the Google Drive and YouTube actions.
 
 You can find examples and documentation for these gems from the links above.
 You must add the following line to your action metadata to use the above gems:
@@ -506,6 +507,8 @@ def clicked
 end
 ```
 
+*NOTE: When using included Ruby gems you can simply require them directly. Do not add a require 'bundler/setup' line before requiring gems included with Dropzone as this is already done for you and requiring bundler again can cause problems in some cases.*
+
 ## Bundling Ruby gems along with your action
 
 If your action needs gems that are not included with the system Ruby or with Dropzone then you can download and run this [bundle-gems.sh](https://gist.github.com/aptonic/27f869d4c3647cb51725) script to download the gems listed in a Gemfile into your action bundle. You must have the bundler gem installed to use this script, you can install bundler by running:
@@ -514,13 +517,14 @@ If your action needs gems that are not included with the system Ruby or with Dro
 gem install bundler
 ```
 
-Below is an example of using this script to download the google-api-client gem into an action bundle:
+Below is an example of using this script to download the [Chunky PNG](https://github.com/wvanbergen/chunky_png) gem into an action bundle:
+
 
 First create the Gemfile inside the action bundle with the following:
 
 ```ruby
 source 'https://rubygems.org'
-gem 'google-api-client'
+gem 'chunky_png'
 ```
 
 Now run [bundle-gems.sh](https://gist.github.com/aptonic/27f869d4c3647cb51725) with the action path to download the gems into the bundle:
@@ -535,18 +539,18 @@ In your action.rb you must add the following line to your action metadata to use
 # RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
 ```
 
-You must also add the following require statement after the action metadata before requiring the bundled gems:
+You must also add the following require statement after the action metadata before requiring your bundled gems:
 
 ```ruby
-require 'bundler/setup'
+require './bundler/setup'
 ```
 
-Now require the gems:
+Note the ./ in front of the bundler/setup. This is important as it ensures that the bundler setup.rb inside your action bundle is required rather than the one included with Dropzone to support the [included gems.](#included-ruby-gems)
+
+Now require the gem:
 
 ```ruby
-require 'google/api_client'
-require 'google/api_client/client_secrets'
-require 'google/api_client/auth/installed_app'
+require 'chunky_png'
 ```
 
 ## Bundling your own Ruby libs and helper executables
