@@ -491,6 +491,7 @@ The following Ruby gems are distributed along with the Dropzone application bund
 - [google-api-client](https://github.com/google/google-api-ruby-client) - Access many different Google APIs. Currently used by the Google Drive and YouTube actions.
 
 You can find examples and documentation for these gems from the links above.
+
 You must add the following line to your action metadata to use the above gems:
 
 ```ruby
