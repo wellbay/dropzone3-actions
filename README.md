@@ -483,6 +483,7 @@ The following Ruby gems are distributed along with the Dropzone application bund
 
 - [rest-client](https://github.com/rest-client/rest-client/blob/master/README.rdoc) - Simple HTTP and REST client for Ruby
 - [httparty](https://github.com/jnunemaker/httparty/blob/master/README.md) - Makes http fun again!
+- [faraday](https://github.com/lostisland/faraday) - Faraday is an HTTP client lib that provides a common interface over many adapters (such as Net::HTTP)
 - [excon](https://github.com/excon/excon/blob/master/README.md) - Usable, fast, simple Ruby HTTP 1.1
 - [fog](http://fog.io/) - The Ruby cloud services library 
 - [aws-sdk](http://aws.amazon.com/sdk-for-ruby/) - AWS SDK for Ruby 
