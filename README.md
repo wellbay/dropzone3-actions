@@ -1,6 +1,6 @@
 # Dropzone 3 Actions
 
-This repository contains a bunch of add-on actions that work with Dropzone 3. You can quick install most of these actions from a [list of featured](http://aptonic.com/dropzone3/actions) actions on our website [here](http://aptonic.com/dropzone3/actions) or alternatively you can clone this repository and double click on bundles to add them.
+This repository contains a bunch of add-on actions that work with Dropzone 3. You can quick install most of these actions from a [list of featured](http://aptonic.com/dropzone3/actions) actions on our website [here](http://aptonic.com/dropzone3/actions). All other [untested actions](http://aptonic.com/dropzone3/actions/untested) from this repository can be installed from [this page.](http://aptonic.com/dropzone3/actions/untested)
 
 This repository works in conjunction with the [dropzone3-actions-zipped](https://github.com/aptonic/dropzone3-actions-zipped) repository which contains zipped versions of these actions (auto updated nightly). The zipped versions are better if you want to download only specific actions or need to provide a link to an action. The API documentation for Dropzone 3 is provided below.
 
@@ -27,13 +27,21 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
 - [Showing Alerts and Errors](#showing-alerts-and-errors)
   - [$dz.alert(title, message)](#dzalerttitle-message)
   - [$dz.error(title, message)](#dzerrortitle-message)
+- [Getting Input](#getting-input)
+  - [$dz.inputbox(title, prompt_text, field_name)](#dzinputboxtitle-prompt_text-field_name)
+- [Reading from the clipboard](#reading-from-the-clipboard)
+  - [$dz.read_clipboard](#dzread_clipboard)
 - [CocoaDialog](#cocoadialog)
 - [Saving and loading values](#saving-and-loading-values)
 - [Key Modifiers](#key-modifiers)
 - [Copying Files](#copying-files)
 - [Getting a temporary folder](#getting-a-temporary-folder)
 - [OptionsNIBs](#optionsnibs)
-- [Bundling Ruby libs and executables](#bundling-ruby-libs-and-executables)
+- [Included Ruby gems](#included-ruby-gems)
+- [Bundling Ruby gems along with your action](#bundling-ruby-gems-along-with-your-action)
+- [Bundling your own Ruby libs and helper executables](#bundling-your-own-ruby-libs-and-helper-executables)
+- [RubyPath metadata field](#rubypath-metadata-field)
+- [CurlUploader Ruby library](#curluploader-ruby-library)
 - [Customizing your actions icon](#customizing-your-actions-icon)
 - [Distributing your action](#distributing-your-action)
 - [Action Metadata](#action-metadata)
@@ -86,17 +94,17 @@ def dragged
 
   $dz.begin("Starting some task...")
   $dz.determinate(true)
-  
+
   # Below lines tell Dropzone to update the progress bar display
   $dz.percent(10)
   sleep(1)
   $dz.percent(50)
   sleep(1)
   $dz.percent(100)
-  
+
   # The below line tells Dropzone to end with a notification center notification with the text "Task Complete"
   $dz.finish("Task Complete")
-  
+
   # You should always call $dz.url or $dz.text last in your script. The below $dz.text line places text on the clipboard.
   # If you don't want to place anything on the clipboard you should still call $dz.url(false)
   $dz.text("Here's some output which will be placed on the clipboard")
@@ -316,6 +324,33 @@ $dz.error("Error Title", "An error occurred...")
 
 Note that calling $dz.error results in your script terminating immediately while calling $dz.alert allows you to display a message and then continue execution of your script.
 
+
+## Getting Input
+
+### $dz.inputbox(title, prompt_text, field_name)
+
+Shows an input box with the given title and prompt text. If no input is entered or the Cancel button is clicked the script exits and calls [$dz.fail](#dzfailmessage) with an appropriate message. The field_name parameter is optional and is used if the user doesn't enter any input to show a '#{field_name} cannot be empty.' [$dz.fail](#dzfailmessage) message. The field_name parameter defaults to 'Filename'
+
+**Example**
+
+```ruby
+filename = $dz.inputbox("Filename Required", "Enter filename:")
+```
+
+![Inputbox](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/inputbox.png)
+
+## Reading from the clipboard
+
+### $dz.read_clipboard
+
+Returns the current clipboard contents.
+
+**Example**
+
+```ruby
+clipboard_contents = $dz.read_clipboard
+```
+
 ## CocoaDialog
 
 CocoaDialog is an application bundled with Dropzone that allows the use of common UI controls such as file selectors, text input, yes/no confirmations and more. You can learn more about how to use CocoaDialog [here.](http://mstratman.github.io/cocoadialog/#documentation) CocoaDialog has many possible uses in a Dropzone action, for example, the 'Save Text' action that ships with Dropzone uses CocoaDialog to popup a dialog box to get the desired filename.
@@ -412,7 +447,7 @@ Would output /Users/john/Library/Application Support/Dropzone 3/Temp to the debu
 
 Some actions may require additional information from the user, such as login details, API keys or a folder path in order to work. Dropzone provides a way to collect this information by loading an additional interface into the 'Add Action' panel when a user adds your action to the Dropzone grid. When Dropzone runs your action, environment variables are set with the information collected in the OptionsNIB.
 
-The currently available OptionsNIBs are Login, ExtendedLogin, APIKey, UsernameAPIKey, ChooseFolder and ChooseApplication. To use an OptionsNIB, you need to add a line to the metadata section like below:
+The currently available OptionsNIBs are Login, ExtendedLogin, APIKey, UsernameAPIKey, ChooseFolder, ChooseApplication and GoogleAuth. To use an OptionsNIB, you need to add a line to the metadata section like below:
 
 ```ruby
 # OptionsNIB: Login
@@ -442,10 +477,182 @@ When your action is run, the values would then be available from the environment
 	</tr>
 </table>
 
+## Included Ruby gems
 
-## Bundling Ruby libs and executables
+The following Ruby gems are distributed along with the Dropzone application bundle and made available for actions to use:
+
+- [rest-client](https://github.com/rest-client/rest-client/blob/master/README.rdoc) - Simple HTTP and REST client for Ruby
+- [httparty](https://github.com/jnunemaker/httparty/blob/master/README.md) - Makes http fun again!
+- [faraday](https://github.com/lostisland/faraday) - Faraday is an HTTP client lib that provides a common interface over many adapters (such as Net::HTTP)
+- [excon](https://github.com/excon/excon/blob/master/README.md) - Usable, fast, simple Ruby HTTP 1.1
+- [fog](http://fog.io/) - The Ruby cloud services library 
+- [aws-sdk](http://aws.amazon.com/sdk-for-ruby/) - AWS SDK for Ruby 
+- [multi_json](https://github.com/intridea/multi_json/blob/master/README.md) - A generic swappable back-end for JSON handling
+- [google-api-client](https://github.com/google/google-api-ruby-client) - Access many different Google APIs. Currently used by the Google Drive and YouTube actions.
+
+You can find examples and documentation for these gems from the links above.
+
+You must add the following line to your action metadata to use the above gems:
+
+```ruby
+# RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
+```
+
+Require the above gems at the top of action.rb to use them. These bundled gems have been tested and confirmed to work correctly with the default Ruby setup under OS X 10.9 and 10.10. 
+Here is an example action (excluding the required metadata) that retrieves the URL http://example.com using the included rest-client gem and prints it to the Dropzone debug console:
+
+```ruby
+require 'rest-client'
+ 
+def clicked
+  puts RestClient.get 'http://example.com'
+end
+```
+
+*NOTE: When using included Ruby gems you can simply require them directly. Do not add a require 'bundler/setup' line before requiring gems included with Dropzone as this is already done for you and requiring bundler again can cause problems in some cases.*
+
+## Bundling Ruby gems along with your action
+
+If your action needs gems that are not included with the system Ruby or with Dropzone then you can download and run this [bundle-gems.sh](https://gist.github.com/aptonic/27f869d4c3647cb51725) script to download the gems listed in a Gemfile into your action bundle. You must have the bundler gem installed to use this script, you can install bundler by running:
+
+```ruby
+gem install bundler
+```
+
+Below is an example of using this script to download the [Chunky PNG](https://github.com/wvanbergen/chunky_png) gem into an action bundle:
+
+
+First create the Gemfile inside the action bundle with the following:
+
+```ruby
+source 'https://rubygems.org'
+gem 'chunky_png'
+```
+
+Now run [bundle-gems.sh](https://gist.github.com/aptonic/27f869d4c3647cb51725) with the action path to download the gems into the bundle:
+
+```
+$ ./bundle-gems.sh ~/Library/Application\ Support/Dropzone\ 3/Actions/Custom\ Action.dzbundle/
+```
+
+In your action.rb you must add the following line to your action metadata to use bundled gems:
+
+```ruby
+# RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
+```
+
+You must also add the following require statement after the action metadata before requiring your bundled gems:
+
+```ruby
+require './bundler/setup'
+```
+
+Note the ./ in front of the bundler/setup. This is important as it ensures that the bundler setup.rb inside your action bundle is required rather than the one included with Dropzone to support the [included gems.](#included-ruby-gems)
+
+Now require the gem:
+
+```ruby
+require 'chunky_png'
+```
+
+## Bundling your own Ruby libs and helper executables
 
 You can include Ruby libs needed by your action by placing them inside your action bundle. Before running your action, runner.rb changes the working directory to the inside of your action bundle. This means you can do require 'libname' where libname is the name of a .rb file inside your action bundle. There is an example of this in the [Flickr Upload](https://github.com/aptonic/dropzone3-actions/tree/master/Flickr%20Upload.dzbundle) bundle. The Flickr Upload action also demonstrates how to launch an application or command line tool bundled with your action. 
+
+## RubyPath metadata field
+
+When Dropzone runs an action, the version of Ruby it uses depends on the version of OS X Dropzone is being run under. The table below shows which Ruby version is run for each OS X version:
+
+<table>
+	<th>
+		OS X Version
+	</th>
+	<th>
+		Ruby Version Dropzone Uses
+	</th>
+	<tr>
+		<td>10.8</td>
+		<td>/usr/bin/ruby - This will be Ruby 1.8. No other Ruby versions are included with the system.</td>
+	</tr>
+	<tr>
+		<td>10.9</td>
+		<td>/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby - Both Ruby 1.8 and Ruby 2.0 are available, with Ruby 1.8 being the current default.</td>
+	</tr>
+	<tr>
+		<td>10.10</td>
+		<td>/usr/bin/ruby - This will be Ruby 2.0. No other Ruby versions are included with the system.</td>
+	</tr>
+</table>
+
+You can override the above behavior by specifying the RubyPath metadata field in your action metadata. 
+The most common reason to do this is to force the use of Ruby 2.0 under both OS X 10.9 and OS X 10.10. You can do this with the following action metadata line:
+
+```ruby
+# RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
+```
+
+Going forward, using Ruby 2.0 is preferred and Ruby 1.8 will be phased out. You must add the above line to use the [gems included](#included-ruby-gems) with Dropzone or if you need to [bundle your own gems](#bundling-ruby-gems-along-with-your-action) along with an action.
+
+As Ruby 2.0 is not available under OS X 10.8, forcing Ruby 2.0 will mean that your action will not work under OS X 10.8. Instead a warning will be shown to the user when they try to add the action asking them to upgrade to a newer version of OS X. With the majority of Dropzone users running either OS X 10.9 or OS X 10.10, Ruby 2.0 is still the recommended option.
+
+If you have other Ruby versions on your system that you installed, you can use these with the RubyPath option but specifying your own Ruby version will mean that the action will only work on your own system and you will not be able to share it with others.
+
+## CurlUploader Ruby library
+
+Some web services (such as Imgur and ImageShack) allow you to upload a file by posting it to a particular URL. To achieve this, Dropzone provides a Ruby wrapper around the curl command line tool included with OS X. The reason for using command line curl is that it provides upload progress as the file is sent. Upload progress is not offered by the built in Ruby libraries such as 'net/http' and so a solution was needed that worked out of the box on all versions of OS X and didn't rely on libraries (such as libcurl) that required compilation of native extensions.
+
+Here's an example that uses the CurlUploader library to upload an image to Imgur. Action metadata is not shown (the below would also need # OptionsNIB: Imgur specified in the metadata as this causes the client_id environment variable required by Imgur for anonymous uploading to be set). You can change the upload_url and other options as needed to work with your own web service. 
+
+```ruby
+require 'curl_uploader'
+
+def dragged
+  uploader = CurlUploader.new
+  uploader.upload_url = "https://api.imgur.com/3/upload"
+  uploader.file_field_name = "image"
+  uploader.headers["Authorization"] = "Client-ID #{ENV['client_id']}"
+  results = uploader.upload($items)
+
+  $dz.finish("URL is now on clipboard")
+  $dz.url(results[0][:output]["data"]["link"])
+end
+```
+
+When dragging a file onto an action with the above, the CurlUploader library runs the following command using IO.popen:
+
+```
+/usr/bin/curl -# -H "Authorization: Client-ID AUTH_ID"  -F "image=@/Users/john/Desktop/test.png" "https://api.imgur.com/3/upload" 2>&1 | tr -u "\r" "\n"
+```
+
+The output from this command is processed line by line by the CurlUploader library and [$dz.percent](#dzpercentvalue) calls are made automatically so that Dropzone displays the upload progress.
+
+The result after uploading with curl is an array of hashes with the keys <em>:output</em> and <em>:curl_output_valid</em> for every path uploaded. <em>:output</em> is a hash created by treating the curl output as JSON. <em>:curl_output_valid</em> is set to true if a certain string is found in the output. The starting string also gives CurlUploader a string from which to start processing output from. This starting string defaults to '"success'" but it can be set as follows:
+
+```ruby
+uploader.output_start_token = '"success"'
+```
+
+Here's an example of the results array after uploading two images successfully to Imgur (with some keys removed for brevity).
+
+```ruby
+results = uploader.upload($items)
+puts results.inspect
+```
+
+```ruby
+[{:output => {"data" => {"link" => "http://i.imgur.com/rTfVPbqx.png"}, :curl_output_valid => true}, 
+{:output => {"data" => {"link" => "http://i.imgur.com/TghcXsze.png"}, :curl_output_valid => true}]
+```
+
+If required you can specify extra POST variables (for example if the web service required you to post extra variables for authentication, such as an API key) by setting post_vars with a hash of the variables you wish to set. An example of this is given below.
+
+```ruby
+uploader.post_vars = {:api_key => ENV['api_key']}
+```
+
+The same applies for setting headers, simply set uploader.headers to a hash with the required headers as shown in the first example.
+
+You can view the source code for the CurlUploader library inside the Dropzone 3 application bundle at 'Dropzone 3.app/Contents/Actions/lib/curl_uploader.rb'
 
 ## Customizing your actions icon
 
@@ -460,7 +667,7 @@ There needs to be an icon.png file inside your action bundle. This icon is used 
 ## Distributing your action
 
 Dropzone 3 action distribution is done via GitHub. You should clone this repository, copy your dzbundle into it and send a GitHub pull request.
-To copy your action, [Reveal](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/reveal.png) it in the Finder from the User Actions tab in the Preferences and then copy it into your cloned copy of this repository. After your pull request is merged, within 24 hours your action can be automatically installed from a link like http://aptonic.com/dropzone3/actions/install.php?bundle_name=Bundle%20Name where Bundle%20Name is the URL encoded name of your action bundle.
+To copy your action, [Reveal](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/reveal.png) it in the Finder from the User Actions tab in the Preferences and then copy it into your cloned copy of this repository. After your pull request is merged, within 24 hours your action can be automatically installed from a link like http://aptonic.com/dropzone3/actions/install.php?bundle_name=Bundle%20Name where Bundle%20Name is the URL encoded name of your action bundle. Your action will also appear on the [untested actions](http://aptonic.com/dropzone3/actions/untested) page automatically.
 
 In order to make your action updatable, you must add a UniqueID metadata field with a random numeric ID before releasing it.
 To release an update for your action: make your changes, increment the version number in the action metadata then send a pull request with your action to this repository. Users will then be automatically updated to the newest version of your action.
@@ -477,7 +684,7 @@ The metadata block must begin with the line:
 ```
 And this must be the first thing at the top of the file.
 
-All recognised metadata options are described below:
+All recognized metadata options are described below:
 
 <table>
 	<th width="240">
@@ -523,8 +730,8 @@ All recognised metadata options are described below:
 	<tr>
 		<td>OptionsNIB</td>
 		<td>A optional configuration panel that can be shown when adding the action to collect needed info such as a username, password or API key<br/>
-			Currently available OptionsNIBs are: Login, ExtendedLogin, APIKey, UsernameAPIKey, ChooseFolder and ChooseApplication<br/>
-			See the OptionsNIBs section further down for an explanation of how to use these.</td>
+			Currently available OptionsNIBs are: Login, ExtendedLogin, APIKey, UsernameAPIKey, ChooseFolder, ChooseApplication and GoogleAuth.<br/>
+			See the <a href="#optionsnibs">OptionsNIBs section</a> for an explanation of how to use these.</td>
 		<td>No</td>
 	</tr>
 	<tr>
@@ -533,8 +740,13 @@ All recognised metadata options are described below:
 		<td>No</td>
 	</tr>
 	<tr>
+		<td>SkipValidation</td>
+		<td>Allows you to disable validation of fields for an OptionsNIB. For example if you specified the Login OptionsNIB then when the user goes to add the action they would be required to enter both a username and password. If you wanted to disable validation and make these fields optional then you would set this metadata field to Yes. It defaults to No (validation required).</td>
+		<td>No</td>
+	</tr>
+	<tr>
 		<td>RunsSandboxed</td>
-		<td>If your action does things that are incompatible with OS X sandboxing (such as running AppleScript or writing to arbitrary directories) then set this to No. Users of the non-Mac App Store version of Dropzone 3 will be able to run your action as normal but users of the Mac App Store version of Dropzone 3 will be prompted to install a special helper app that runs your action unsandboxed on behalf of the parent app.</td>
+		<td>If your action does things that are incompatible with OS X sandboxing (such as running AppleScript or writing to arbitrary directories) then set this to No. Users of the non-Mac App Store version of Dropzone 3 will be able to run your action as normal but users of the Mac App Store version of Dropzone 3 will be prompted to transition to the non-Mac App Store version of the app.</td>
 		<td>Yes</td>
 	</tr>
 	<tr>
@@ -554,7 +766,7 @@ All recognised metadata options are described below:
 	</tr>
 	<tr>
 		<td>KeyModifiers</td>
-		<td>A comma separated list of key modifiers your action supports. When the user drags a file onto your action they can hold a particular modifier key including Command, Option, Control or Shift. The held modifier will be passed to your script in the ENV['KEY_MODIFIERS'] variable and you can modify the behaviour of your action based on the held key. A example of valid values for this field would be "Option" or "Command, Option, Control, Shift" (without quotes).</td>
+		<td>A comma separated list of key modifiers your action supports. When the user drags a file onto your action they can hold a particular modifier key including Command, Option, Control or Shift. The held modifier will be passed to your script in the ENV['KEY_MODIFIERS'] variable and you can modify the behavior of your action based on the held key. A example of valid values for this field would be "Option" or "Command, Option, Control, Shift" (without quotes).</td>
 		<td>No</td>
 	</tr>
 	<tr>
@@ -565,6 +777,16 @@ All recognised metadata options are described below:
 	<tr>
 		<td>UseSelectedItemNameAndIcon</td>
 		<td>If your action uses the ChooseFolder OptionsNIB then this specifies whether you want the label and icon to be set to the chosen folders after selecting the folder. Defaults to No.</td>
+		<td>No</td>
+	</tr>
+	<tr>
+		<td>RubyPath</td>
+		<td>The default Ruby used by Dropzone actions is Ruby 1.8 under OS X 10.9 and Ruby 2.0 under OS X 10.10. You can use this metadata field to override these defaults and specify a custom Ruby path. More info about this option can be found in the <a href="#rubypath-metadata-field">RubyPath section</a> above. You generally want to set this to /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby to allow use of gems included with Dropzone.</td>
+		<td>No</td>
+	</tr>
+	<tr>
+		<td>AuthScope</td>
+		<td>This field is only applicable if your action uses the GoogleAuth OptionsNIB which allows authorization using OAuth 2 in order to use a particular Google service. For an example that uses this option, see the <a href="https://github.com/aptonic/dropzone3-actions/blob/master/Google%20Drive.dzbundle/action.rb">Google Drive</a> action code. A list of possible scopes can be found <a href="http://hayageek.com/google-oauth-scope-list/">here.</a></td>
 		<td>No</td>
 	</tr>
 </table>
