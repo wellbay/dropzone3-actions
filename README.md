@@ -71,7 +71,7 @@ This will bring up the 'Develop Action' dialog shown below which allows you to c
 
 ![Develop Dialog](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/develop-dialog.png)
 
-The values entered here will be used to generate the metadata section at the top of action.rb/action.py. When you've chosen values appropriate for your action, click Create Action. This will open your default text editor with the newly generated script file and add the action to your Dropzone grid. The generated script file provides template code so you can easily get started. The generated Ruby template script is given below.
+The values entered here will be used to generate the metadata section at the top of the action.rb/action.py script. When you've chosen values appropriate for your action, click Create Action. This will open your default text editor with the newly generated script file and add the action to your Dropzone grid. The generated script file provides template code so you can easily get started. The generated Ruby template script is given below.
 
 ### Generated Template Action
 
