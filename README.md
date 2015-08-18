@@ -58,7 +58,7 @@ A Dropzone action also accepts a click event so when you click on it in the Drop
 
 There have been big changes to the Dropzone API since Dropzone 2. Actions listed in this repository will only work with Dropzone 3. Dropzone 2 actions (.dropzone files) can still be added to Dropzone 3 but it's best if you install the [Bundle Script](http://aptonic.com/dropzone3/actions/install.php?bundle_name=Bundle%20Script) action from [here](http://aptonic.com/dropzone3/actions/install.php?bundle_name=Bundle%20Script) to convert old Dropzone 2 scripts into updated Dropzone 3 action bundles.
 
-A Dropzone 3 action bundle is simply a directory with a .dzbundle extension. It must contain either an action.rb script (for Ruby actions) or an action.py script (for Python actions) and also an icon.png file that contains the default icon for the action. The bundle can also optionally contain other resources such as Ruby or Python libraries or executables. The action.rb/action.py file must have certain metadata at the top. Dropzone parses this metadata when you add the action. 
+A Dropzone 3 action bundle is simply a directory with a .dzbundle extension. It must contain either an action.rb script (for Ruby actions) or an action.py script (for Python actions) and also an icon.png file that contains the default icon for the action. The bundle can also optionally contain other resources such as Ruby or Python libraries or executables. The action.rb or action.py file must have certain metadata at the top. Dropzone parses this metadata when you add the action. 
 
 ## Developing an Action
 
@@ -71,7 +71,7 @@ This will bring up the 'Develop Action' dialog shown below which allows you to c
 
 ![Develop Dialog](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/develop-dialog.png)
 
-The values entered here will be used to generate the metadata section at the top of the action.rb/action.py script. When you've chosen values appropriate for your action, click Create Action. This will open your default text editor with the newly generated script file and add the action to your Dropzone grid. The generated script file provides template code so you can easily get started. The generated Ruby template script is given below.
+The values entered here will be used to generate the metadata section at the top of the action.rb or action.py script. When you've chosen values appropriate for your action, click Create Action. This will open your default text editor with the newly generated script file and add the action to your Dropzone grid. The generated script file provides template code so you can easily get started. The generated Ruby template script is given below.
 
 ### Generated Template Action
 
@@ -135,7 +135,7 @@ The debug console makes it quick and easy to view the output and environment of 
 
 ![Debug Console](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/debug-console.png)
 
-The screenshot above shows the debug console after dropping two files onto the template action (the code for this is given in the [above section](#generated-template-action)). When a task is run, Dropzone creates a task description file that contains all the needed info to start the task. The runner.rb Ruby script (located inside the Dropzone.app application bundle at Contents/Actions/lib/runner.rb) then reads this task description file, sets environment variables and then calls the appropriate method in your action.rb script. The task description file contents are output in the debug console when running a task.
+The screenshot above shows the debug console after dropping two files onto the template action (the code for this is given in the [above section](#generated-template-action)). When a task is run, Dropzone creates a task description file that contains all the needed info to start the task. The runner.rb Ruby script (located inside the Dropzone.app application bundle at Contents/Actions/lib/runner.rb) then reads this task description file, sets environment variables and then calls the appropriate method in your action.rb or action.py script. The task description file contents are output in the debug console when running a task.
 
 In the above example, the task description file contents were:
 
@@ -185,6 +185,87 @@ case ENV['dragged_type']
   # $items[0] is the dragged string of text
 end
 ```
+
+## Python Support
+
+In Dropzone 3.5 and later you can develop Dropzone actions in Python. Dropzone detects whether there is an action.rb or action.py in the action bundle and runs your action with Python if it sees the .py extension.
+
+The easiest way to develop a new Python action is to click the white plus in the top left of the grid and choose the 'Develop Action...' item and then select 'Python' from the language drop down as shown below:
+
+![Develop Action](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/develop-python.png)
+<br>
+
+This would result in the following example action.py:
+
+```python
+# Dropzone Action Info
+# Name: Test Python Action
+# Description: A Python action!
+# Handles: Files
+# Creator: Your name
+# URL: http://yoursite.com
+# Events: Clicked, Dragged
+# KeyModifiers: Command, Option, Control, Shift
+# SkipConfig: No
+# RunsSandboxed: Yes
+# Version: 1.0
+# MinDropzoneVersion: 3.5
+
+import time
+
+def dragged():
+    print(items)
+
+    dz.begin("Starting some task...")
+    dz.determinate(True)
+
+    dz.percent(10)
+    time.sleep(1)
+    dz.percent(50)
+    time.sleep(1)
+    dz.percent(100)
+
+    dz.finish("Task Complete")
+
+    dz.text("Here's some output which will be placed on the clipboard")
+ 
+def clicked():
+    dz.finish("You clicked me!")
+    dz.url(False)
+```
+
+Like the Ruby API, you can call the Dropzone API methods on the global dz object. All the $dz Ruby API methods documented in the following sections can also be called from Python, the only difference is you should remove the $ sign from the front of the dz, so instead of doing:
+
+```ruby
+$dz.begin("Starting some task...")
+```
+
+For Python actions you should do:
+
+```python
+dz.begin("Starting some task...")
+```
+
+To output debug info to the Dropzone [debug console](#debug-console) you should use the Python print() function rather than the puts() function used in Ruby.
+
+For example:
+
+```python
+print("This text will be output to the Dropzone debug console from a Python action")
+```
+
+When trying to import a Python library it's possible you'll get an error like:
+
+```
+Traceback (most recent call last):
+  File "/Applications/Dropzone 3.app/Contents/Actions/lib/python_runner.py", line 9, in <module>
+import action
+  File "/Users/john/Library/Application Support/Dropzone 3/Actions/Dzbundles.dzbundle/action.py", line 15, in <module>
+    import tkinter
+ImportError: No module named tkinter
+```
+
+This can occur if you have an alternative version of Python installed.
 
 ## Providing Status Updates
 
