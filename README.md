@@ -54,11 +54,11 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
 
 The general idea of a Dropzone action is that files or text will be dropped on the action and then the action will perform some useful function on the dropped items. This might be uploading the dropped files to a web service, renaming the files, resizing images, zipping files etc. The possible uses are limited only by your imagination.
 
-A Dropzone action also accepts a click event so when you click on it in the Dropzone grid it does something: for example the [Finder Path](https://aptonic.com/dropzone3/actions/install.php?bundle_name=Finder%20Path) action copies the currently selected item path in Finder to the clipboard. The API outlined below describes how you can easily develop your own actions to use with Dropzone and then share these actions with others. Dropzone actions are developed in Ruby so it's a good idea to learn a little Ruby first if you haven't coded in it before. There's an excellent introduction to the Ruby language [here.](http://www.codecademy.com/tracks/ruby)
+A Dropzone action also accepts a click event so when you click on it in the Dropzone grid it does something: for example the [Finder Path](https://aptonic.com/dropzone3/actions/install.php?bundle_name=Finder%20Path) action copies the currently selected item path in Finder to the clipboard. The API outlined below describes how you can easily develop your own actions to use with Dropzone and then share these actions with others. Dropzone actions are developed in either Ruby or Python. If you haven't coded in Ruby or Python before then it would be a good idea to learn a little of either of these languages before attempting to create a Dropzone action. There's a good hands-on introduction to the Ruby language [here](http://www.codecademy.com/tracks/ruby) and an introduction to Python [here.](http://www.learnpython.org)
 
 There have been big changes to the Dropzone API since Dropzone 2. Actions listed in this repository will only work with Dropzone 3. Dropzone 2 actions (.dropzone files) can still be added to Dropzone 3 but it's best if you install the [Bundle Script](http://aptonic.com/dropzone3/actions/install.php?bundle_name=Bundle%20Script) action from [here](http://aptonic.com/dropzone3/actions/install.php?bundle_name=Bundle%20Script) to convert old Dropzone 2 scripts into updated Dropzone 3 action bundles.
 
-A Dropzone 3 action bundle is simply a directory with a .dzbundle extension. It must contain an action.rb script and an icon.png file that contains the default icon for the action. The bundle can also optionally contain other resources such as Ruby libraries or executables. The action.rb file must have certain metadata at the top. Dropzone parses this metadata when you add the action. 
+A Dropzone 3 action bundle is simply a directory with a .dzbundle extension. It must contain either an action.rb script (for Ruby actions) or an action.py script (for Python actions) and also an icon.png file that contains the default icon for the action. The bundle can also optionally contain other resources such as Ruby or Python libraries or executables. The action.rb/action.py file must have certain metadata at the top. Dropzone parses this metadata when you add the action. 
 
 ## Developing an Action
 
@@ -71,7 +71,7 @@ This will bring up the 'Develop Action' dialog shown below which allows you to c
 
 ![Develop Dialog](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/develop-dialog.png)
 
-The values entered here will be used to generate the metadata section at the top of action.rb. When you've chosen values appropriate for your action, click Create Action. This will open your default text editor with the newly generated action.rb file and add the action to your Dropzone grid. The generated action.rb file provides template code so you can easily get started. The template is given below.
+The values entered here will be used to generate the metadata section at the top of action.rb/action.py. When you've chosen values appropriate for your action, click Create Action. This will open your default text editor with the newly generated script file and add the action to your Dropzone grid. The generated script file provides template code so you can easily get started. The generated Ruby template script is given below.
 
 ### Generated Template Action
 
