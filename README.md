@@ -16,6 +16,7 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
   - [Copy and Edit an existing action](#copy-and-edit-an-existing-action)
 - [Debug Console](#debug-console)
 - [Dragged Types](#dragged-types)
+- [Python Support](#python-support)
 - [Providing Status Updates](#providing-status-updates)
   - [$dz.begin(message)](#dzbeginmessage)
   - [$dz.determinate(value)](#dzdeterminatevalue)
