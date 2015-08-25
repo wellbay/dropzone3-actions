@@ -877,7 +877,7 @@ All recognized metadata options are described below:
 	</tr>
 	<tr>
 		<td>PythonPath</td>
-		<td>The default Python used by Dropzone actions is Python 2.7 (located at /usr/bin/python) under all OS X versions. You can use this metadata field to override this and specify a custom Python path. More info about this option can be found in the <a href="#Using-an-alternative-Python-version">Using an alternative Python version section</a> above. If you have installed Python 3 and want to use this instead you generally want to set this to /usr/local/bin/python3</td>
+		<td>The default Python used by Dropzone actions is Python 2.7 (located at /usr/bin/python) under all OS X versions. You can use this metadata field to override this and specify a custom Python path. More info about this option can be found in the <a href="#using-an-alternative-python-version">Using an alternative Python version section</a> above. If you have installed Python 3 and want to use this instead you generally want to set this to /usr/local/bin/python3</td>
 		<td>No</td>
 	</tr>
 	<tr>
