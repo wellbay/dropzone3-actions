@@ -258,7 +258,7 @@ print("This text will be output to the Dropzone debug console from a Python acti
 
 ### Using an alternative Python version
 
-When trying to import a Python library you may find you can import a library fine when using Python from the Terminal, but then when you try and import the same library in Dropzone you get an error something like the following:
+When trying to import a Python library you may find that you can import a library fine when using Python from the Terminal, but then when you try and import the same library in Dropzone you get an error something like the following:
 
 ```
 Traceback (most recent call last):
@@ -271,11 +271,11 @@ ImportError: No module named tkinter
 
 This can occur if you have an alternative version of Python (e.g. Python 3) installed. By default Dropzone will be using the Python at /usr/bin/python to run your script. To fix this you can override the Python version Dropzone uses to run your action by using the PythonPath metadata option. You can use this as follows:
 
-```
+```ruby
 # PythonPath: /usr/local/bin/python3
 ```
 
-Adding that line in your action metadata would tell Dropzone to run your action with the Python at /usr/local/bin/python3 rather than the default system Python. This is the default install path for Python 3 so adding the line above should fix import problems in most cases. The only downside is that your action will not work on Macs that don't have Python installed in the same path.
+Adding that line in your action metadata would tell Dropzone to run your action with the Python at /usr/local/bin/python3 rather than the default system Python. This is the default install path for Python 3 so adding the line above should fix import problems in most cases. The only downside is that your action will not work on other Macs that don't have Python installed in the same path.
 
 ## Providing Status Updates
 
