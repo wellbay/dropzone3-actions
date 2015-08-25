@@ -17,6 +17,7 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
 - [Debug Console](#debug-console)
 - [Dragged Types](#dragged-types)
 - [Python Support](#python-support)
+  - [Using an alternative Python version](#using-an-alternative-python-version)
 - [Providing Status Updates](#providing-status-updates)
   - [$dz.begin(message)](#dzbeginmessage)
   - [$dz.determinate(value)](#dzdeterminatevalue)
@@ -255,7 +256,9 @@ For example:
 print("This text will be output to the Dropzone debug console from a Python action")
 ```
 
-When trying to import a Python library it's possible you'll get an error like:
+### Using an alternative Python version
+
+When trying to import a Python library you may find you can import a library fine when using Python from the Terminal, but then when you try and import the same library in Dropzone you get an error something like the following:
 
 ```
 Traceback (most recent call last):
@@ -266,7 +269,13 @@ import action
 ImportError: No module named tkinter
 ```
 
-This can occur if you have an alternative version of Python installed.
+This can occur if you have an alternative version of Python (e.g. Python 3) installed. By default Dropzone will be using the Python at /usr/bin/python to run your script. To fix this you can override the Python version Dropzone uses to run your action by using the PythonPath metadata option. You can use this as follows:
+
+```
+# PythonPath: /usr/local/bin/python3
+```
+
+Adding that line in your action metadata would tell Dropzone to run your action with the Python at /usr/local/bin/python3 rather than the default system Python. This is the default install path for Python 3 so adding the line above should fix import problems in most cases. The only downside is that your action will not work on Macs that don't have Python installed in the same path.
 
 ## Providing Status Updates
 
@@ -863,7 +872,12 @@ All recognized metadata options are described below:
 	</tr>
 	<tr>
 		<td>RubyPath</td>
-		<td>The default Ruby used by Dropzone actions is Ruby 1.8 under OS X 10.9 and Ruby 2.0 under OS X 10.10. You can use this metadata field to override these defaults and specify a custom Ruby path. More info about this option can be found in the <a href="#rubypath-metadata-field">RubyPath section</a> above. You generally want to set this to /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby to allow use of gems included with Dropzone.</td>
+		<td>The default Ruby used by Dropzone actions is Ruby 1.8 under OS X 10.9 and Ruby 2.0 under OS X 10.10 and later. You can use this metadata field to override these defaults and specify a custom Ruby path. More info about this option can be found in the <a href="#rubypath-metadata-field">RubyPath section</a> above. You generally want to set this to /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby to allow use of gems included with Dropzone.</td>
+		<td>No</td>
+	</tr>
+	<tr>
+		<td>PythonPath</td>
+		<td>The default Python used by Dropzone actions is Python 2.7 (located at /usr/bin/python) under all OS X versions. You can use this metadata field to override this and specify a custom Python path. More info about this option can be found in the <a href="#Using-an-alternative-Python-version">Using an alternative Python version section</a> above. If you have installed Python 3 and want to use this instead you generally want to set this to /usr/local/bin/python3</td>
 		<td>No</td>
 	</tr>
 	<tr>
