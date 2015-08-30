@@ -17,6 +17,7 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
 - [Debug Console](#debug-console)
 - [Dragged Types](#dragged-types)
 - [Python Support](#python-support)
+  - [Accessing OptionsNIB environment variables](#accessing-optionsnib-environment-variables)
   - [Using an alternative Python version](#using-an-alternative-python-version)
 - [Providing Status Updates](#providing-status-updates)
   - [$dz.begin(message)](#dzbeginmessage)
