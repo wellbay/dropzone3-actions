@@ -256,6 +256,44 @@ For example:
 print("This text will be output to the Dropzone debug console from a Python action")
 ```
 
+### Accessing OptionsNIB environment variables
+
+If the Python action you're writing uses an [OptionsNIB](#optionsnibs) to get additional info from the user when setting up the action, you can access these set variables by using:
+
+```python
+import os
+```
+
+And then:
+
+```python
+os.environ['variable_name']
+```
+
+Here's an example action.py that requires a username and password when adding it and then prints these set variables to the Dropzone [debug console](#debug-console) when you click it.
+
+```python
+# Dropzone Action Info
+# Name: Python OptionsNIB Test
+# Description: Shows how to access OptionsNIBs variables when using Python.
+# Creator: Your name
+# URL: http://aptonic.com
+# OptionsNIB: Login
+# Events: Clicked
+# SkipConfig: No
+# RunsSandboxed: Yes
+# Version: 1.0
+# MinDropzoneVersion: 3.5
+
+import time
+import os
+ 
+def clicked():
+    print os.environ['username']
+    print os.environ['password']
+    dz.url(False)
+```
+
 ### Using an alternative Python version
 
 When trying to import a Python library you may find that you can import a library fine when using Python from the Terminal, but then when you try and import the same library in Dropzone you get an error something like the following:
