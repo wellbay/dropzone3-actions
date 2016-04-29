@@ -34,6 +34,8 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
   - [$dz.inputbox(title, prompt_text, field_name)](#dzinputboxtitle-prompt_text-field_name)
 - [Reading from the clipboard](#reading-from-the-clipboard)
   - [$dz.read_clipboard](#dzread_clipboard)
+- [Adding items to Drop Bar via the API](#adding-items-to-drop-bar-via-the-api)
+  - [$dz.add_dropbar](#dzadd_dropbar)
 - [CocoaDialog](#cocoadialog)
 - [Saving and loading values](#saving-and-loading-values)
 - [Key Modifiers](#key-modifiers)
@@ -480,6 +482,31 @@ Returns the current clipboard contents.
 ```ruby
 clipboard_contents = $dz.read_clipboard
 ```
+
+## Adding items to Drop Bar via the API
+
+### $dz.add_dropbar
+
+Since Dropzone version 3.6 you can add items to Drop Bar using the API. This can be useful if your action produces a file output - Call this method to make the output file available for easy dragging somewhere else. Note that Drop Bar just keeps references to files and not the files themselves so a file needs to exist somewhere else on the filesystem for it to be added to and dragged out of Drop Bar.
+
+To add a file to Drop Bar, simply call the $dz.add_dropbar method with an array of files you want to add. A new Drop Bar will be created in the Dropzone grid with the file(s) that you pass to this method.
+
+**Ruby Example**
+
+```ruby
+file_paths = [File.expand_path('~') + "/Pictures/test.jpg"]
+$dz.add_dropbar(file_paths)
+```
+
+Or to add multiple files to a new Drop Bar:
+
+```ruby
+file_paths = [File.expand_path('~') + "/Pictures/test.jpg", File.expand_path('~') + "/Pictures/test2.jpg"]
+$dz.add_dropbar(file_paths)
+```
+
+This API method also works from Python. Simply remove the $ sign from the dz as explained in the [Python Support](#python-support) section.
+
 
 ## CocoaDialog
 
