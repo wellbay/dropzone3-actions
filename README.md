@@ -728,29 +728,27 @@ When Dropzone runs an action, the version of Ruby it uses depends on the version
 		Ruby Version Dropzone Uses
 	</th>
 	<tr>
-		<td>10.8</td>
-		<td>/usr/bin/ruby - This will be Ruby 1.8. No other Ruby versions are included with the system.</td>
-	</tr>
-	<tr>
 		<td>10.9</td>
-		<td>/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby - Both Ruby 1.8 and Ruby 2.0 are available, with Ruby 1.8 being the current default.</td>
+		<td>/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby - Both Ruby 1.8 and Ruby 2 are available, with Ruby 1.8 being the default. You should use the RubyPath metadata line below to force Ruby 2.</td>
 	</tr>
 	<tr>
 		<td>10.10</td>
-		<td>/usr/bin/ruby - This will be Ruby 2.0. No other Ruby versions are included with the system.</td>
+		<td>/usr/bin/ruby - Ruby 2. No other Ruby versions are included with the system.</td>
+	</tr>
+	<tr>
+		<td>10.11</td>
+		<td>/usr/bin/ruby - Ruby 2. No other Ruby versions are included with the system.</td>
 	</tr>
 </table>
 
 You can override the above behavior by specifying the RubyPath metadata field in your action metadata. 
-The most common reason to do this is to force the use of Ruby 2.0 under both OS X 10.9 and OS X 10.10. You can do this with the following action metadata line:
+The most common reason to do this is to force the use of Ruby 2 under OS X 10.9. You can do this with the following action metadata line:
 
 ```ruby
 # RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
 ```
 
-Going forward, using Ruby 2.0 is preferred and Ruby 1.8 will be phased out. You must add the above line to use the [gems included](#included-ruby-gems) with Dropzone or if you need to [bundle your own gems](#bundling-ruby-gems-along-with-your-action) along with an action.
-
-As Ruby 2.0 is not available under OS X 10.8, forcing Ruby 2.0 will mean that your action will not work under OS X 10.8. Instead a warning will be shown to the user when they try to add the action asking them to upgrade to a newer version of OS X. With the majority of Dropzone users running either OS X 10.9 or OS X 10.10, Ruby 2.0 is still the recommended option.
+Going forward, using Ruby 2 is preferred and Ruby 1.8 is deprecated. You must add the above line to use the [gems included](#included-ruby-gems) with Dropzone or if you need to [bundle your own gems](#bundling-ruby-gems-along-with-your-action) along with an action.
 
 If you have other Ruby versions on your system that you installed, you can use these with the RubyPath option but specifying your own Ruby version will mean that the action will only work on your own system and you will not be able to share it with others.
 
@@ -938,7 +936,7 @@ All recognized metadata options are described below:
 	</tr>
 	<tr>
 		<td>RubyPath</td>
-		<td>The default Ruby used by Dropzone actions is Ruby 1.8 under OS X 10.9 and Ruby 2.0 under OS X 10.10 and later. You can use this metadata field to override these defaults and specify a custom Ruby path. More info about this option can be found in the <a href="#rubypath-metadata-field">RubyPath section</a> above. You generally want to set this to /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby to allow use of gems included with Dropzone.</td>
+		<td>The default Ruby used by Dropzone actions is Ruby 1.8 under OS X 10.9 and Ruby 2 under OS X 10.10 and later. You can use this metadata field to override these defaults and specify a custom Ruby path. More info about this option can be found in the <a href="#rubypath-metadata-field">RubyPath section</a> above. You generally want to set this to /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby to allow use of gems included with Dropzone.</td>
 		<td>No</td>
 	</tr>
 	<tr>
