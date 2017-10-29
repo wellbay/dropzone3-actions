@@ -672,7 +672,6 @@ gem install bundler
 
 Below is an example of using this script to download the [Chunky PNG](https://github.com/wvanbergen/chunky_png) gem into an action bundle:
 
-
 First create the Gemfile inside the action bundle with the following:
 
 ```ruby
@@ -686,13 +685,7 @@ Now run [bundle-gems.sh](https://gist.github.com/aptonic/27f869d4c3647cb51725) w
 $ ./bundle-gems.sh ~/Library/Application\ Support/Dropzone\ 3/Actions/Custom\ Action.dzbundle/
 ```
 
-In your action.rb you must add the following line to your action metadata to use bundled gems:
-
-```ruby
-# RubyPath: /System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby
-```
-
-You must also add the following require statement after the action metadata before requiring your bundled gems:
+Add the following require statement after the action metadata before requiring your bundled gems:
 
 ```ruby
 require './bundler/setup'
