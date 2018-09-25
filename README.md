@@ -36,7 +36,7 @@ This repository works in conjunction with the [dropzone3-actions-zipped](https:/
   - [$dz.read_clipboard](#dzread_clipboard)
 - [Adding items to Drop Bar via the API](#adding-items-to-drop-bar-via-the-api)
   - [$dz.add_dropbar(items)](#dzadd_dropbaritems)
-- [CocoaDialog](#cocoadialog)
+- [Pashua](#pashua)
 - [Saving and loading values](#saving-and-loading-values)
 - [Key Modifiers](#key-modifiers)
 - [Copying Files](#copying-files)
@@ -508,43 +508,130 @@ $dz.add_dropbar(file_paths)
 This API method also works from Python. Simply remove the $ sign from the dz as explained in the [Python Support](#python-support) section.
 
 
-## CocoaDialog
+## Pashua
 
-CocoaDialog is an application bundled with Dropzone that allows the use of common UI controls such as file selectors, text input, yes/no confirmations and more. You can learn more about how to use CocoaDialog [here.](http://mstratman.github.io/cocoadialog/#documentation) CocoaDialog has many possible uses in a Dropzone action, for example, the 'Save Text' action that ships with Dropzone uses CocoaDialog to popup a dialog box to get the desired filename.
+[Pashua](https://www.bluem.net/en/projects/pashua) is an application bundled with Dropzone that allows the use of common UI controls such as text input, buttons, checkboxes, dropdown selection boxes and more. Pashua has many possible uses in a Dropzone action, for example, the 'Save Text' action that ships with Dropzone uses Pashua to popup a dialog box to get the desired filename.
 
-You can launch CocoaDialog by calling $dz.cocoa_dialog(arguments) where arguments is a string with the arguments to be passed to the CocoaDialog command line tool.
+You can launch Pashua by calling $dz.pashua(arguments) where arguments is a string with the arguments to be passed to the Pashua command line tool.
 
 **Examples**
 
-The below example prompts the user for a filename and outputs the entered filename to the debug console. It also handles the case where the user clicks the cancel button:
+Here's an example of how you can use it to prompt for some text in a Dropzone action:
+
+In Ruby:
 
 ```ruby
-output = $dz.cocoa_dialog('standard-inputbox --title "Save to File" --e --informative-text "Enter Filename:"')
-button, filename = output.split("\n")
-
-$dz.fail("Cancelled") if button == "2"
-
-puts filename
+config = "
+*.title = Test Dialog
+p.type = textfield
+p.label = Enter some text
+"
+result = $dz.pashua(config)
 ```
 
-The below example gets a yes or no answer from the user and then outputs the result to the debug console:
+In Python:
+
+```python
+config = """
+*.title = Test Dialog
+p.type = textfield
+p.label = Enter some text
+"""
+result = dz.pashua(config)
+```
+
+Would result in:
+
+![Pashua Inputbox](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/pashua-enter-text.png)
+
+Here's another example that uses Pashua to show a popup selection box:
+
+In Ruby:
 
 ```ruby
-output = $dz.cocoa_dialog('yesno-msgbox --no-cancel --text "Are you sure you want to delete this file?"')
-if output == "1\n"
-  puts "Yes was clicked" 
-else
-  puts "No was clicked"
+config = "
+*.title = Selection Dialog
+p.type = popup
+p.label = Choose an option
+p.width = 310
+p.option = Option 1
+p.option = Option 2
+p.option = Option 3
+cb.type = cancelbutton
+b.type = button
+b.label = Another button
+"
+result = $dz.pashua(config)
+puts result['p']
+```
+
+In Python:
+
+```python
+config = """
+*.title = Selection Dialog
+p.type = popup
+p.label = Choose an option
+p.width = 310
+p.option = Option 1
+p.option = Option 2
+p.option = Option 3
+cb.type = cancelbutton
+b.type = button
+b.label = Another button
+"""
+result = dz.pashua(config)
+print result['p']
+```
+
+Would result in:
+
+![Pashua Selectbox](https://raw.githubusercontent.com/aptonic/dropzone3-actions/master/docs/pashua-selection-dialog.png)
+
+The users choice would be printed in the Dropzone debug console (open the grid and press Cmd+Shift+D to open the console). If you want to know if the button labelled ‘Another button’ was clicked instead, you can check this as follows:
+
+In Ruby:
+
+```ruby
+if result['b'] == '1'
+  puts "Another button clicked!"
 end
 ```
 
+In Python:
+
+```python
+if result['b'] == '1':
+  print "Another button clicked!"
+```
+
+Or to check if the user clicked the cancel button:
+
+In Ruby:
+
+```ruby
+if result['cb'] == '1'
+  puts "User cancelled!"
+end
+```
+
+In Python:
+
+```python
+if result['cb'] == '1':
+  print "User cancelled!"
+```
+
+The full Pashua documentation is available [here.](https://www.bluem.net/pashua-docs-latest.html)
+Also see the blog post announcing Pashua support in Dropzone [here.](https://aptonic.com/blog/dropzone-3-6-8-released-with-pashua-support/)
+
 ## Saving and loading values
 
-Your action can store string values in the Dropzone database by calling $dz.save_value(value_name, value). This is useful for storing configuration for your action - e.g. when your action first runs you could use CocoaDialog to prompt for a setting and then store the result. When your action is next run, all saved values are set as environment variables and can be accessed using ENV['stored_value_name']. You can see which variables were set in the [debug console](#debug-console) each time your action is run. If the user has multiple instances of your action setup in the grid, the stored values are unique to each instance.
+Your action can store string values in the Dropzone database by calling $dz.save_value(value_name, value). This is useful for storing configuration for your action - e.g. when your action first runs you could use Pashua to prompt for a setting and then store the result. When your action is next run, all saved values are set as environment variables and can be accessed using ENV['stored_value_name'] in Ruby or os.environ['stored_value_name'] in Python. You can see which variables were set in the [debug console](#debug-console) each time your action is run. If the user has multiple instances of your action setup in the grid, the stored values are unique to each instance.
 
 Example
 
-Saving the value:
+Saving a value:
 
 ```ruby
 $dz.save_value('username', 'john')
@@ -552,8 +639,23 @@ $dz.save_value('username', 'john')
 
 Outputting the saved value to the debug console:
 
+In Ruby:
+
 ```ruby
 puts ENV['username']
+```
+
+In Python:
+
+```python
+import os
+print os.environ['username']
+```
+
+You can also remove values stored for a grid action by doing $dz.remove_value(value_name). For example to delete the stored value in the above example you could do the following:
+
+```ruby
+$dz.remove_value('username')
 ```
 
 ## Key Modifiers
